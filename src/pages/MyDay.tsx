@@ -5,12 +5,17 @@ import MicroGoals from "@/components/MicroGoals";
 import EarningsPanel from "@/components/EarningsPanel";
 import AIInsightsPanel from "@/components/AIInsightsPanel";
 import { leads as initialLeads, dailyGoals } from "@/lib/mockData";
+import type { LeadStatus } from "@/lib/mockData";
 
 export default function MyDayPage() {
   const [leads, setLeads] = useState(initialLeads);
 
   const toggleLead = (id: string) => {
     setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, completed: !l.completed } : l)));
+  };
+
+  const changeStatus = (id: string, status: LeadStatus) => {
+    setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, status } : l)));
   };
 
   const sortedLeads = [...leads].sort((a, b) => {
@@ -40,7 +45,7 @@ export default function MyDayPage() {
             <span className="text-xs text-muted-foreground">{leads.filter((l) => l.completed).length}/{leads.length} done</span>
           </div>
           {sortedLeads.map((lead, i) => (
-            <LeadCard key={lead.id} lead={lead} index={i} onToggle={toggleLead} />
+            <LeadCard key={lead.id} lead={lead} index={i} onToggle={toggleLead} onStatusChange={changeStatus} />
           ))}
         </div>
 
