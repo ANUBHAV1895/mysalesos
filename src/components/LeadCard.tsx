@@ -5,9 +5,9 @@ import { Check, Phone, MessageCircle, Clock, Mail, ChevronRight, Flame, Zap } fr
 import type { Lead, LeadStatus } from "@/lib/mockData";
 
 const statusColors: Record<string, string> = {
-  hot: "bg-hot/10 text-hot border-hot/30",
-  warm: "bg-warm/10 text-warm border-warm/30",
-  cold: "bg-cold/10 text-cold border-cold/30",
+  hot: "bg-hot/15 text-hot border-hot/30",
+  warm: "bg-warm/15 text-warm border-warm/30",
+  cold: "bg-cold/15 text-cold border-cold/30",
 };
 
 const statusOptions: LeadStatus[] = ["hot", "warm", "cold"];
@@ -38,8 +38,8 @@ export default function LeadCard({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04, duration: 0.3 }}
-      className={`group relative rounded-xl border bg-card p-4 shadow-card transition-all hover:shadow-elevated hover:border-primary/30 ${
-        lead.completed ? "opacity-50" : ""
+      className={`group relative rounded-xl border border-border/40 bg-card p-4 shadow-card transition-all hover:shadow-elevated hover:border-primary/30 hover:-translate-y-0.5 ${
+        lead.completed ? "opacity-40" : ""
       }`}
     >
       <div className="flex items-start gap-3">
@@ -48,7 +48,7 @@ export default function LeadCard({
           onClick={() => onToggle(lead.id)}
           className={`mt-0.5 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all flex-shrink-0 ${
             lead.completed
-              ? "bg-primary border-primary"
+              ? "bg-gradient-primary border-primary"
               : "border-muted-foreground/40 hover:border-primary"
           }`}
         >
@@ -87,7 +87,7 @@ export default function LeadCard({
                           }}
                           className={`w-full text-left text-xs px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-2 ${
                             lead.status === status
-                              ? "bg-primary/10 text-primary"
+                              ? "bg-primary/15 text-primary"
                               : "text-foreground hover:bg-muted"
                           }`}
                         >
@@ -109,10 +109,10 @@ export default function LeadCard({
 
           <div className="flex items-center gap-3 text-xs text-muted-foreground mb-2">
             <span>{lead.source}</span>
-            <span>•</span>
+            <span className="text-border">•</span>
             <span>{lead.lastInteraction}</span>
-            <span>•</span>
-            <span className="font-mono text-foreground/80">₹{lead.dealValue.toLocaleString()}</span>
+            <span className="text-border">•</span>
+            <span className="font-mono text-foreground/80 glow-number">₹{lead.dealValue.toLocaleString()}</span>
           </div>
 
           {/* AI Reason */}
@@ -123,7 +123,7 @@ export default function LeadCard({
 
           {/* Next Best Action */}
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/10 text-primary text-xs font-medium">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/10 text-primary text-xs font-medium border border-primary/20">
               <ActionIcon className="w-3 h-3" />
               <span>{lead.nextActionLabel}</span>
             </div>
@@ -131,13 +131,13 @@ export default function LeadCard({
 
           {/* Health Bar */}
           <div className="mt-3 flex items-center gap-2">
-            <div className="flex-1 h-1 rounded-full bg-muted overflow-hidden">
+            <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${lead.healthScore}%` }}
                 transition={{ delay: index * 0.04 + 0.2, duration: 0.6 }}
                 className={`h-full rounded-full ${
-                  lead.healthScore > 70 ? "bg-primary" : lead.healthScore > 40 ? "bg-warm" : "bg-destructive"
+                  lead.healthScore > 70 ? "bg-gradient-primary" : lead.healthScore > 40 ? "bg-warm" : "bg-destructive"
                 }`}
               />
             </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Phone, MessageCircle, Mail, Clock, ChevronRight, Sparkles, CheckCircle2, ArrowUpRight, Copy, ExternalLink } from "lucide-react";
+import { ArrowLeft, Phone, MessageCircle, Mail, Clock, Sparkles, CheckCircle2, ArrowUpRight, Copy, ExternalLink } from "lucide-react";
 import { leads } from "@/lib/mockData";
 import type { LeadStatus } from "@/lib/mockData";
 import { toast } from "sonner";
@@ -22,9 +22,9 @@ const interactionIcons: Record<string, React.ElementType> = {
 };
 
 const statusColors: Record<string, string> = {
-  hot: "bg-hot/10 text-hot border-hot/30",
-  warm: "bg-warm/10 text-warm border-warm/30",
-  cold: "bg-cold/10 text-cold border-cold/30",
+  hot: "bg-hot/15 text-hot border-hot/30",
+  warm: "bg-warm/15 text-warm border-warm/30",
+  cold: "bg-cold/15 text-cold border-cold/30",
 };
 
 const statusOptions: LeadStatus[] = ["hot", "warm", "cold"];
@@ -71,7 +71,7 @@ export default function LeadDetailPage() {
 
   return (
     <div>
-      <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-4">
+      <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">
         <ArrowLeft className="w-4 h-4" />
         Back to My Day
       </Link>
@@ -80,13 +80,12 @@ export default function LeadDetailPage() {
         {/* Main */}
         <div className="lg:col-span-2 space-y-5">
           {/* Header */}
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border bg-card p-5 shadow-card">
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-border/40 bg-card p-5 shadow-card">
             <div className="flex items-start justify-between mb-3">
               <div>
                 <h1 className="text-xl font-bold text-foreground">{lead.name}</h1>
                 <p className="text-sm text-muted-foreground">{lead.company} · {lead.source}</p>
               </div>
-              {/* One-click status change */}
               <div className="flex items-center gap-1.5">
                 {statusOptions.map((status) => (
                   <button
@@ -105,7 +104,7 @@ export default function LeadDetailPage() {
             </div>
             <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <span>Stage: <span className="text-foreground font-medium">{lead.stage}</span></span>
-              <span>Deal: <span className="text-foreground font-mono font-semibold">₹{lead.dealValue.toLocaleString()}</span></span>
+              <span>Deal: <span className="text-foreground font-mono font-semibold glow-number">₹{lead.dealValue.toLocaleString()}</span></span>
               <span>Health: <span className={`font-mono font-semibold ${lead.healthScore > 70 ? 'text-primary' : lead.healthScore > 40 ? 'text-warm' : 'text-destructive'}`}>{lead.healthScore}%</span></span>
             </div>
           </motion.div>
@@ -124,13 +123,13 @@ export default function LeadDetailPage() {
                 <p className="text-warm mt-2">⚠️ Key objections: {lead.objections.join(", ")}</p>
               )}
               <p className="text-muted-foreground text-xs mt-2">
-                Sentiment: <span className={lead.sentiment === "positive" ? "text-primary" : lead.sentiment === "negative" ? "text-destructive" : "text-muted-foreground"}>{lead.sentiment}</span>
+                Sentiment: <span className={lead.sentiment === "positive" ? "text-success" : lead.sentiment === "negative" ? "text-destructive" : "text-muted-foreground"}>{lead.sentiment}</span>
               </p>
             </div>
           </motion.div>
 
           {/* Activity Timeline */}
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="rounded-xl border bg-card p-5 shadow-card">
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="rounded-xl border border-border/40 bg-card p-5 shadow-card">
             <h3 className="text-sm font-semibold text-foreground mb-4">📊 Activity Timeline</h3>
             <div className="space-y-4">
               {lead.interactions.map((interaction, i) => {
@@ -160,7 +159,7 @@ export default function LeadDetailPage() {
             <h3 className="text-sm font-semibold text-foreground mb-3">🎯 Next Best Action</h3>
             <button
               onClick={handleNextAction}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gradient-primary text-primary-foreground font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98]"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gradient-primary text-primary-foreground font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98] shadow-glow-primary"
             >
               <ActionIcon className="w-4 h-4" />
               {lead.nextActionLabel}
@@ -169,9 +168,9 @@ export default function LeadDetailPage() {
           </motion.div>
 
           {/* Smart Status Update */}
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="rounded-xl border bg-card p-5 shadow-card">
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="rounded-xl border border-border/40 bg-card p-5 shadow-card">
             <h3 className="text-sm font-semibold text-foreground mb-3">🔄 Smart Status Update</h3>
-            <div className="p-3 rounded-lg bg-accent/5 border border-accent/15 mb-3">
+            <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 mb-3">
               <p className="text-xs text-accent mb-2">AI suggests:</p>
               <p className="text-sm font-medium text-foreground">{suggestedLabel}</p>
             </div>
@@ -185,25 +184,25 @@ export default function LeadDetailPage() {
           </motion.div>
 
           {/* WhatsApp Draft */}
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="rounded-xl border bg-card p-5 shadow-card">
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="rounded-xl border border-border/40 bg-card p-5 shadow-card">
             <div className="flex items-center gap-2 mb-3">
-              <MessageCircle className="w-4 h-4 text-primary" />
+              <MessageCircle className="w-4 h-4 text-success" />
               <h3 className="text-sm font-semibold text-foreground">AI WhatsApp Draft</h3>
             </div>
-            <div className="p-3 rounded-lg bg-muted text-sm text-foreground leading-relaxed mb-3">
+            <div className="p-3 rounded-lg bg-muted text-sm text-foreground leading-relaxed mb-3 border border-border/30">
               {whatsAppDraft}
             </div>
             <div className="flex gap-2">
               <button
                 onClick={handleSendWhatsApp}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-colors active:scale-[0.98]"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-success/10 text-success text-sm font-medium hover:bg-success/20 transition-colors active:scale-[0.98] border border-success/20"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
                 Send via WhatsApp
               </button>
               <button
                 onClick={handleCopyDraft}
-                className="flex items-center justify-center px-3 py-2.5 rounded-lg bg-muted text-muted-foreground hover:text-foreground text-sm transition-colors"
+                className="flex items-center justify-center px-3 py-2.5 rounded-lg bg-muted text-muted-foreground hover:text-foreground text-sm transition-colors border border-border/30"
               >
                 <Copy className="w-3.5 h-3.5" />
               </button>

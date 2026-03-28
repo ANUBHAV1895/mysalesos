@@ -1,15 +1,15 @@
 import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown, Brain, Trophy, AlertTriangle, Lightbulb, ArrowUpRight, BarChart3 } from "lucide-react";
-import { weeklyStats, earnings } from "@/lib/mockData";
+import { weeklyStats } from "@/lib/mockData";
 
 function StatCard({ label, value, trend, suffix }: { label: string; value: string | number; trend: number; suffix?: string }) {
   const isPositive = trend >= 0;
   return (
-    <div className="rounded-xl border border-border/60 bg-card p-4">
+    <div className="rounded-xl border border-border/40 bg-card p-4 shadow-card">
       <p className="text-xs text-muted-foreground mb-1">{label}</p>
       <div className="flex items-end gap-2">
-        <span className="text-2xl font-bold font-mono text-foreground">{value}{suffix}</span>
-        <span className={`text-xs font-medium flex items-center gap-0.5 mb-1 ${isPositive ? "text-primary" : "text-destructive"}`}>
+        <span className="text-2xl font-bold font-mono text-foreground glow-number">{value}{suffix}</span>
+        <span className={`text-xs font-medium flex items-center gap-0.5 mb-1 ${isPositive ? "text-success" : "text-destructive"}`}>
           {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
           {isPositive ? "+" : ""}{trend}%
         </span>
@@ -25,7 +25,7 @@ export default function AICoachPage() {
         <div className="flex items-center gap-2 mb-1">
           <Brain className="w-5 h-5 text-primary" />
           <h1 className="text-2xl font-bold text-foreground">AI Coach</h1>
-          <span className="text-xs font-mono text-muted-foreground px-2 py-0.5 rounded-md bg-muted">WEEKLY REFLECTION</span>
+          <span className="text-[10px] font-mono text-primary px-2 py-0.5 rounded-md bg-primary/10 border border-primary/20">WEEKLY REFLECTION</span>
         </div>
         <p className="text-sm text-muted-foreground">Your performance insights and coaching tips for this week.</p>
       </motion.div>
@@ -44,31 +44,31 @@ export default function AICoachPage() {
         <div className="lg:col-span-2 space-y-5">
           {/* Activity Summary */}
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-            className="rounded-xl border border-border/60 bg-card p-5"
+            className="rounded-xl border border-border/40 bg-card p-5 shadow-card"
           >
             <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-primary" />
-              📈 Weekly Activity
+              Weekly Activity
             </h3>
             <div className="grid grid-cols-3 gap-4">
               {[
-                { label: "Total Calls", value: weeklyStats.totalCalls, color: "text-primary" },
-                { label: "WhatsApp Sent", value: weeklyStats.totalWhatsApp, color: "text-info" },
-                { label: "Emails Sent", value: weeklyStats.totalEmails, color: "text-accent" },
+                { label: "Total Calls", value: weeklyStats.totalCalls, color: "text-primary glow-number" },
+                { label: "WhatsApp Sent", value: weeklyStats.totalWhatsApp, color: "text-success glow-success" },
+                { label: "Emails Sent", value: weeklyStats.totalEmails, color: "text-accent glow-accent" },
               ].map((stat) => (
-                <div key={stat.label} className="text-center p-3 rounded-lg bg-muted/50">
+                <div key={stat.label} className="text-center p-3 rounded-lg bg-muted/30 border border-border/30">
                   <p className={`text-2xl font-bold font-mono ${stat.color}`}>{stat.value}</p>
                   <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
                 </div>
               ))}
             </div>
             <div className="mt-4 grid grid-cols-2 gap-4">
-              <div className="p-3 rounded-lg bg-primary/5 border border-primary/10 text-center">
-                <p className="text-lg font-bold font-mono text-primary">₹{weeklyStats.pipelineValue.toLocaleString()}</p>
+              <div className="p-3 rounded-lg bg-primary/10 border border-primary/20 text-center">
+                <p className="text-lg font-bold font-mono text-primary glow-number">₹{weeklyStats.pipelineValue.toLocaleString()}</p>
                 <p className="text-xs text-muted-foreground mt-1">Pipeline Value</p>
               </div>
-              <div className="p-3 rounded-lg bg-accent/5 border border-accent/10 text-center">
-                <p className="text-lg font-bold font-mono text-accent">₹{weeklyStats.closedThisWeek.toLocaleString()}</p>
+              <div className="p-3 rounded-lg bg-success/10 border border-success/20 text-center">
+                <p className="text-lg font-bold font-mono text-success glow-success">₹{weeklyStats.closedThisWeek.toLocaleString()}</p>
                 <p className="text-xs text-muted-foreground mt-1">Closed This Week</p>
               </div>
             </div>
@@ -76,18 +76,18 @@ export default function AICoachPage() {
 
           {/* Behaviour Insights */}
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-            className="rounded-xl border border-border/60 bg-card p-5"
+            className="rounded-xl border border-border/40 bg-card p-5 shadow-card"
           >
             <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
               <Brain className="w-4 h-4 text-primary" />
-              🧠 Behaviour Insights
+              Behaviour Insights
             </h3>
             <div className="space-y-3">
               {[
-                { text: "You close 30% more deals with <24h follow-ups", icon: TrendingUp, color: "text-primary bg-primary/5 border-primary/10" },
-                { text: "Call pickup rate is highest between 4–6 PM", icon: ArrowUpRight, color: "text-info bg-info/5 border-info/10" },
-                { text: "Your WhatsApp response rate: 78% (team avg: 52%)", icon: TrendingUp, color: "text-primary bg-primary/5 border-primary/10" },
-                { text: "You progress leads 2x faster when you call within 2h of a website visit", icon: ArrowUpRight, color: "text-info bg-info/5 border-info/10" },
+                { text: "You close 30% more deals with <24h follow-ups", icon: TrendingUp, color: "text-success bg-success/10 border-success/20" },
+                { text: "Call pickup rate is highest between 4–6 PM", icon: ArrowUpRight, color: "text-primary bg-primary/10 border-primary/20" },
+                { text: "Your WhatsApp response rate: 78% (team avg: 52%)", icon: TrendingUp, color: "text-success bg-success/10 border-success/20" },
+                { text: "You progress leads 2x faster when you call within 2h of a website visit", icon: ArrowUpRight, color: "text-primary bg-primary/10 border-primary/20" },
               ].map((insight, i) => (
                 <div key={i} className={`flex items-start gap-2.5 p-3 rounded-lg border ${insight.color}`}>
                   <insight.icon className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
@@ -103,11 +103,11 @@ export default function AICoachPage() {
           >
             <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-destructive" />
-              ⚠️ Lost Opportunities
+              Lost Opportunities
             </h3>
             <div className="space-y-3">
               {weeklyStats.lostOpportunities.map((opp, i) => (
-                <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-card border border-border/60">
+                <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-card border border-border/40">
                   <div>
                     <p className="text-sm font-medium text-foreground">{opp.name}</p>
                     <p className="text-xs text-muted-foreground">{opp.reason}</p>
@@ -126,19 +126,19 @@ export default function AICoachPage() {
         <div className="space-y-5">
           {/* Earnings Projection */}
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-            className="rounded-xl border border-border/60 bg-card p-5"
+            className="rounded-xl border border-border/40 bg-card p-5 shadow-card"
           >
             <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
               <Trophy className="w-4 h-4 text-accent" />
-              💸 Earnings Projection
+              Earnings Projection
             </h3>
             <div className="text-center mb-4">
               <p className="text-xs text-muted-foreground mb-1">At current pace</p>
-              <p className="text-3xl font-bold font-mono text-foreground">₹25,000</p>
+              <p className="text-3xl font-bold font-mono text-foreground glow-number">₹25,000</p>
             </div>
-            <div className="p-3 rounded-lg bg-primary/5 border border-primary/10 text-center mb-3">
+            <div className="p-3 rounded-lg bg-primary/10 border border-primary/20 text-center mb-3">
               <p className="text-xs text-primary">Improve follow-ups →</p>
-              <p className="text-xl font-bold font-mono text-primary mt-1">₹32,000</p>
+              <p className="text-xl font-bold font-mono text-primary glow-number mt-1">₹32,000</p>
               <p className="text-[10px] text-primary/70">potential this month</p>
             </div>
             <div className="h-2 rounded-full bg-muted overflow-hidden">
@@ -158,7 +158,7 @@ export default function AICoachPage() {
           >
             <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
               <Lightbulb className="w-4 h-4 text-accent" />
-              💡 Coaching Tips
+              Coaching Tips
             </h3>
             <div className="space-y-3">
               {[
@@ -177,7 +177,7 @@ export default function AICoachPage() {
 
           {/* AI Features */}
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-            className="rounded-xl border border-border/60 bg-card p-5"
+            className="rounded-xl border border-border/40 bg-card p-5 shadow-card"
           >
             <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
               🤖 AI-Powered Features
