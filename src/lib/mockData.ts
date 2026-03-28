@@ -1,5 +1,7 @@
 export type LeadStatus = "hot" | "warm" | "cold";
 export type ActionType = "call" | "whatsapp" | "wait" | "email";
+export type PipelineStage = "new" | "contacted" | "follow_up" | "hot_leads" | "negotiation" | "won" | "lost";
+export type TaskStatus = "today" | "in_progress" | "waiting" | "completed";
 
 export interface Lead {
   id: string;
@@ -14,10 +16,11 @@ export interface Lead {
   nextActionLabel: string;
   dealValue: number;
   completed: boolean;
-  stage: string;
+  stage: PipelineStage;
   objections: string[];
   sentiment: "positive" | "neutral" | "negative";
   interactions: Interaction[];
+  agent?: string;
 }
 
 export interface Interaction {
@@ -33,12 +36,32 @@ export interface DailyGoal {
   icon: string;
 }
 
+export interface ScrumTask {
+  id: string;
+  title: string;
+  leadName?: string;
+  type: "follow_up" | "call" | "update" | "profiling" | "meeting";
+  priority: "high" | "medium" | "low";
+  status: TaskStatus;
+  dueTime?: string;
+}
+
+export const pipelineStages: { key: PipelineStage; label: string; color: string }[] = [
+  { key: "new", label: "New Leads", color: "text-info" },
+  { key: "contacted", label: "Contacted", color: "text-primary" },
+  { key: "follow_up", label: "Follow-up", color: "text-warm" },
+  { key: "hot_leads", label: "Hot Leads", color: "text-hot" },
+  { key: "negotiation", label: "Negotiation", color: "text-primary-glow" },
+  { key: "won", label: "Won", color: "text-won" },
+  { key: "lost", label: "Lost", color: "text-lost" },
+];
+
 export const leads: Lead[] = [
   {
     id: "1", name: "Priya Sharma", company: "TechVista Solutions", source: "Website",
     status: "hot", healthScore: 92, lastInteraction: "2 hours ago",
     aiReason: "Visited pricing page twice today", nextAction: "call", nextActionLabel: "Call now — high intent detected",
-    dealValue: 48000, completed: false, stage: "Negotiation",
+    dealValue: 48000, completed: false, stage: "negotiation", agent: "You",
     objections: ["Budget approval pending", "Comparing with competitor"],
     sentiment: "positive",
     interactions: [
@@ -51,7 +74,7 @@ export const leads: Lead[] = [
     id: "2", name: "Rahul Mehta", company: "GrowthBox Inc", source: "Instagram",
     status: "hot", healthScore: 87, lastInteraction: "4 hours ago",
     aiReason: "Trial expires tomorrow", nextAction: "call", nextActionLabel: "Urgent: Trial expiring — close today",
-    dealValue: 32000, completed: false, stage: "Trial",
+    dealValue: 32000, completed: false, stage: "hot_leads", agent: "You",
     objections: ["Needs team onboarding support"],
     sentiment: "positive",
     interactions: [
@@ -63,7 +86,7 @@ export const leads: Lead[] = [
     id: "3", name: "Anita Desai", company: "CloudNine Analytics", source: "Referral",
     status: "warm", healthScore: 68, lastInteraction: "1 day ago",
     aiReason: "No follow-up for 3 days", nextAction: "whatsapp", nextActionLabel: "Send follow-up message",
-    dealValue: 25000, completed: false, stage: "Proposal Sent",
+    dealValue: 25000, completed: false, stage: "follow_up", agent: "You",
     objections: ["Implementation timeline concerns"],
     sentiment: "neutral",
     interactions: [
@@ -75,7 +98,7 @@ export const leads: Lead[] = [
     id: "4", name: "Vikram Patel", company: "FinEdge Capital", source: "LinkedIn",
     status: "warm", healthScore: 61, lastInteraction: "2 days ago",
     aiReason: "Opened proposal email 4 times", nextAction: "call", nextActionLabel: "Follow up on proposal — high engagement",
-    dealValue: 65000, completed: false, stage: "Proposal Sent",
+    dealValue: 65000, completed: false, stage: "follow_up", agent: "You",
     objections: ["Legal review in progress"],
     sentiment: "neutral",
     interactions: [
@@ -87,7 +110,7 @@ export const leads: Lead[] = [
     id: "5", name: "Sneha Kulkarni", company: "EduSpark", source: "Website",
     status: "warm", healthScore: 55, lastInteraction: "3 days ago",
     aiReason: "Stage stagnant for 5 days", nextAction: "whatsapp", nextActionLabel: "Re-engage with value proposition",
-    dealValue: 18000, completed: true, stage: "Discovery",
+    dealValue: 18000, completed: true, stage: "contacted", agent: "You",
     objections: ["Not sure about ROI"],
     sentiment: "neutral",
     interactions: [
@@ -98,7 +121,7 @@ export const leads: Lead[] = [
     id: "6", name: "Arjun Nair", company: "LogiPrime", source: "Manual",
     status: "cold", healthScore: 35, lastInteraction: "5 days ago",
     aiReason: "Re-engagement window — cold leads convert 40% for you", nextAction: "whatsapp", nextActionLabel: "Try re-engagement message",
-    dealValue: 22000, completed: false, stage: "Initial Contact",
+    dealValue: 22000, completed: false, stage: "new", agent: "You",
     objections: ["Budget constraints Q1"],
     sentiment: "negative",
     interactions: [
@@ -109,7 +132,7 @@ export const leads: Lead[] = [
     id: "7", name: "Meera Joshi", company: "DesignHive", source: "Instagram",
     status: "hot", healthScore: 90, lastInteraction: "1 hour ago",
     aiReason: "Requested contract draft", nextAction: "email", nextActionLabel: "Send contract — ready to close",
-    dealValue: 42000, completed: false, stage: "Closing",
+    dealValue: 42000, completed: false, stage: "negotiation", agent: "You",
     objections: [],
     sentiment: "positive",
     interactions: [
@@ -121,11 +144,33 @@ export const leads: Lead[] = [
     id: "8", name: "Karthik Iyer", company: "DataPulse", source: "Website",
     status: "warm", healthScore: 58, lastInteraction: "2 days ago",
     aiReason: "Competitor mentioned in last call", nextAction: "call", nextActionLabel: "Address competitor concerns",
-    dealValue: 35000, completed: false, stage: "Evaluation",
+    dealValue: 35000, completed: false, stage: "contacted", agent: "You",
     objections: ["Evaluating 2 other vendors"],
     sentiment: "neutral",
     interactions: [
       { type: "call", date: "2 days ago", summary: "Mentioned competitor has lower pricing. Needs differentiation." },
+    ]
+  },
+  {
+    id: "9", name: "Deepak Gupta", company: "RetailMax", source: "Referral",
+    status: "hot", healthScore: 95, lastInteraction: "30 min ago",
+    aiReason: "Contract signed — awaiting payment", nextAction: "email", nextActionLabel: "Send payment link",
+    dealValue: 90000, completed: false, stage: "won", agent: "You",
+    objections: [],
+    sentiment: "positive",
+    interactions: [
+      { type: "email", date: "30 min ago", summary: "Contract signed. Waiting for payment processing." },
+    ]
+  },
+  {
+    id: "10", name: "Pooja Reddy", company: "MedTech Labs", source: "Website",
+    status: "cold", healthScore: 20, lastInteraction: "10 days ago",
+    aiReason: "Went silent after pricing discussion", nextAction: "wait", nextActionLabel: "Mark as lost or re-engage",
+    dealValue: 15000, completed: false, stage: "lost", agent: "You",
+    objections: ["Too expensive", "Not a priority now"],
+    sentiment: "negative",
+    interactions: [
+      { type: "call", date: "10 days ago", summary: "Said they'll reconsider in Q2." },
     ]
   },
 ];
@@ -135,6 +180,17 @@ export const dailyGoals: DailyGoal[] = [
   { label: "Calls completed", current: 5, target: 10, icon: "🎯" },
   { label: "Leads progressed", current: 3, target: 5, icon: "📈" },
   { label: "WhatsApp sent", current: 6, target: 8, icon: "💬" },
+];
+
+export const scrumTasks: ScrumTask[] = [
+  { id: "t1", title: "Call Priya about enterprise pricing", leadName: "Priya Sharma", type: "call", priority: "high", status: "today", dueTime: "10:30 AM" },
+  { id: "t2", title: "Send follow-up to Anita", leadName: "Anita Desai", type: "follow_up", priority: "medium", status: "today", dueTime: "11:00 AM" },
+  { id: "t3", title: "Prepare proposal for Vikram", leadName: "Vikram Patel", type: "update", priority: "high", status: "in_progress", dueTime: "2:00 PM" },
+  { id: "t4", title: "WhatsApp Rahul trial extension", leadName: "Rahul Mehta", type: "follow_up", priority: "high", status: "in_progress" },
+  { id: "t5", title: "Profile new lead from website", type: "profiling", priority: "low", status: "waiting" },
+  { id: "t6", title: "Re-engage Arjun with new offer", leadName: "Arjun Nair", type: "follow_up", priority: "medium", status: "waiting" },
+  { id: "t7", title: "Called Meera — contract agreed", leadName: "Meera Joshi", type: "call", priority: "high", status: "completed" },
+  { id: "t8", title: "Updated Sneha's lead status", leadName: "Sneha Kulkarni", type: "update", priority: "low", status: "completed" },
 ];
 
 export const weeklyStats = {
