@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Brain, TrendingUp, Clock, Zap } from "lucide-react";
+import { Brain, TrendingUp, Zap } from "lucide-react";
 import { aiInsights } from "@/lib/mockData";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -8,17 +8,17 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 const colorMap: Record<string, string> = {
-  success: "text-primary bg-primary/5 border-primary/10",
-  info: "text-info bg-info/5 border-info/10",
+  success: "text-success bg-success/10 border-success/20",
+  info: "text-primary bg-primary/10 border-primary/20",
 };
 
 export default function AIInsightsPanel() {
   return (
-    <div className="rounded-xl border border-border/60 bg-card p-5">
+    <div className="rounded-xl border border-border/40 bg-card p-5 shadow-card">
       <div className="flex items-center gap-2 mb-4">
         <Brain className="w-4 h-4 text-primary" />
         <h3 className="text-sm font-semibold text-foreground">AI Insights</h3>
-        <span className="text-[10px] font-mono text-muted-foreground px-1.5 py-0.5 rounded bg-muted">SMART</span>
+        <span className="text-[10px] font-mono text-primary px-1.5 py-0.5 rounded bg-primary/10 border border-primary/20">SMART</span>
       </div>
 
       <div className="space-y-2.5">

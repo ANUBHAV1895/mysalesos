@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Flame, User, Brain, Sparkles } from "lucide-react";
@@ -13,16 +12,16 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {/* Top Bar */}
-      <header className="sticky top-0 z-50 glass border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+      <header className="sticky top-0 z-50 glass border-b border-border/30">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center shadow-glow-primary">
               <Sparkles className="w-4 h-4 text-primary-foreground" />
             </div>
             <span className="font-semibold text-foreground tracking-tight text-lg">My Day</span>
-            <span className="text-xs font-mono text-muted-foreground ml-1 hidden sm:inline">AI Sales Coach</span>
+            <span className="text-[10px] font-mono text-primary/70 ml-1 hidden sm:inline px-1.5 py-0.5 rounded bg-primary/10 border border-primary/20">AI CRM</span>
           </div>
 
           <nav className="flex items-center gap-1">
@@ -41,7 +40,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                   {isActive && (
                     <motion.div
                       layoutId="nav-indicator"
-                      className="absolute inset-0 rounded-lg bg-secondary"
+                      className="absolute inset-0 rounded-lg bg-primary/10 border border-primary/20"
                       style={{ zIndex: -1 }}
                       transition={{ type: "spring", stiffness: 500, damping: 35 }}
                     />
@@ -53,7 +52,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">{children}</main>
+      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 py-6">{children}</main>
     </div>
   );
 }
